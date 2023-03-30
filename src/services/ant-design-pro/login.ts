@@ -19,3 +19,22 @@ export async function getFakeCaptcha(
     ...(options || {}),
   });
 }
+
+// 获取验证码
+export async function getCaptchaImage() {
+  return request('/api/captchaImage', {
+    headers: {},
+  });
+}
+
+/** 登录接口 POST /login/account */
+export async function login(body: API.LoginParams, options?: Record<string, any>) {
+  return request<API.LoginResult>('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

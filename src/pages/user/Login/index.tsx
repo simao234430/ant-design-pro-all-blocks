@@ -6,13 +6,13 @@ import {
   UserOutlined,
   WeiboCircleOutlined,
 } from '@ant-design/icons';
-import { Alert, message, Tabs } from 'antd';
-import React, { useState } from 'react';
+import { Alert, message, Tabs, Row, Col, Image } from 'antd';
+import React, { useState, useEffect } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
+// import { login } from '@/services/ant-design-pro/api';
+import { getFakeCaptcha, getCaptchaImage, login } from '@/services/ant-design-pro/login';
 
 import styles from './index.less';
 
@@ -34,6 +34,9 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
+  const [captchaCode, setCaptchaCode] = useState<string>('');
+  const [uuid, setUuid] = useState<string>('');
+
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
@@ -45,12 +48,18 @@ const Login: React.FC = () => {
       }));
     }
   };
+  const getCaptchaCode = async () => {
+    const response = await getCaptchaImage();
+    const imgdata = `data:image/png;base64,${response.img}`;
+    setCaptchaCode(imgdata);
+    setUuid(response.uuid);
+  };
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({ ...values, type });
-      if (msg.status === 'ok') {
+      const response = await login({ ...values, uuid });
+      if (response.code === 200) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
@@ -64,9 +73,9 @@ const Login: React.FC = () => {
         history.push(redirect || '/');
         return;
       }
-      console.log(msg);
+      console.log(response);
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
+      // setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
@@ -75,7 +84,11 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
-  const { status, type: loginType } = userLoginState;
+  const { status, type: loginType, massage } = userLoginState;
+
+  useEffect(() => {
+    getCaptchaCode();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -175,6 +188,46 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
+              <Row>
+                <Col flex={3}>
+                  <ProFormText
+                    style={{
+                      float: 'right',
+                    }}
+                    name="code"
+                    placeholder={intl.formatMessage({
+                      id: 'pages.login.captcha.placeholder',
+                      defaultMessage: '请输入验证',
+                    })}
+                    rules={[
+                      {
+                        required: true,
+                        message: (
+                          <FormattedMessage
+                            id="pages.searchTable.updateForm.ruleName.nameRules"
+                            defaultMessage="请输入验证啊"
+                          />
+                        ),
+                      },
+                    ]}
+                  />
+                </Col>
+                <Col flex={2}>
+                  <Image
+                    src={captchaCode}
+                    alt="验证码"
+                    style={{
+                      display: 'inline-block',
+                      verticalAlign: 'top',
+                      cursor: 'pointer',
+                      paddingLeft: '10px',
+                      width: '100px',
+                    }}
+                    preview={false}
+                    onClick={() => getCaptchaCode()}
+                  />
+                </Col>
+              </Row>
             </>
           )}
 
