@@ -5,9 +5,9 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
+import { getUserInfo } from './services/ant-design-pro/session';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -28,8 +28,12 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser();
-      return msg.data;
+      const resp = await getUserInfo();
+      if (resp === undefined || resp.code !== 200) {
+        history.push(loginPath);
+      } else {
+        return { ...resp.user, permissions: resp.permissions } as API.CurrentUser;
+      }
     } catch (error) {
       history.push(loginPath);
     }
@@ -39,9 +43,9 @@ export async function getInitialState(): Promise<{
   if (history.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
     return {
-      fetchUserInfo,
-      currentUser,
       settings: defaultSettings,
+      currentUser,
+      fetchUserInfo,
     };
   }
   return {

@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import { getFakeCaptcha, getCaptchaImage, login } from '@/services/ant-design-pro/login';
 
 import styles from './index.less';
+import { setSessionToken } from '@/access';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -64,6 +65,9 @@ const Login: React.FC = () => {
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
+        const current = new Date();
+        const expireTime = current.setTime(current.getTime() + 1000 * 12 * 60 * 60);
+        setSessionToken(response.token, response.token, expireTime);
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
@@ -73,6 +77,7 @@ const Login: React.FC = () => {
         history.push(redirect || '/');
         return;
       }
+
       console.log(response);
       // 如果失败去设置用户错误信息
       // setUserLoginState(msg);

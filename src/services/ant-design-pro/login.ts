@@ -1,6 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
-import { request } from 'umi';
+import request from '@/utils/request';
 
 /** 发送验证码 POST /api/login/captcha */
 export async function getFakeCaptcha(
@@ -29,7 +29,7 @@ export async function getCaptchaImage() {
 
 /** 登录接口 POST /login/account */
 export async function login(body: API.LoginParams, options?: Record<string, any>) {
-  return request<API.LoginResult>('/login', {
+  return request<API.LoginResult>('/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
