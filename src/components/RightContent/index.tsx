@@ -1,17 +1,21 @@
-import { Space } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Space, Tooltip } from 'antd';
+import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import React from 'react';
-import { useModel, SelectLang } from 'umi';
+
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 import NoticeIconView from '../NoticeIcon';
-
+import { useModel, SelectLang, useIntl } from 'umi';
 export type SiderTheme = 'light' | 'dark';
 
-const GlobalHeaderRight: React.FC = () => {
-  const { initialState } = useModel('@@initialState');
+export interface GlobalHeaderRightProps {
+  switchTabsReloadable?: boolean;
+}
 
+const GlobalHeaderRight: React.FC<GlobalHeaderRightProps> = ({ switchTabsReloadable }) => {
+  const { initialState } = useModel('@@initialState');
+  const { formatMessage } = useIntl();
   if (!initialState || !initialState.settings) {
     return null;
   }
@@ -50,6 +54,19 @@ const GlobalHeaderRight: React.FC = () => {
         //   console.log('input', value);
         // }}
       />
+      {switchTabsReloadable ? (
+        <Tooltip title={formatMessage({ id: 'component.globalHeader.reload' })}>
+          <a
+            style={{
+              color: 'inherit',
+            }}
+            className={styles.action}
+            onClick={() => window.tabsAction.reloadTab()}
+          >
+            <ReloadOutlined />
+          </a>
+        </Tooltip>
+      ) : null}
       <span
         className={styles.action}
         onClick={() => {

@@ -1,13 +1,13 @@
-import { Chart, Coord, Geom, Tooltip } from 'bizcharts';
 import React, { Component } from 'react';
 
 import { DataView } from '@antv/data-set';
 import Debounce from 'lodash.debounce';
-import { Divider } from 'antd';
+import { Divider, Tooltip } from 'antd';
 import ReactFitText from 'react-fittext';
 import classNames from 'classnames';
 import autoHeight from '../autoHeight';
-import styles from './index.less';
+import styles from '../index.less';
+import { Chart, Coord, Geom } from 'bizcharts';
 
 export type PieProps = {
   animate?: boolean;

@@ -8,6 +8,8 @@
 //   };
 // }
 
+import { matchPermission } from './utils/permission';
+
 export default function access(initialState: {
   currentUser: API.CurrentUser | undefined;
   menus: MenuDataItem[] | undefined;
@@ -15,12 +17,12 @@ export default function access(initialState: {
   const { currentUser, menus } = initialState || {};
   return {
     canAdmin: currentUser && currentUser.access === 'admin',
-    // hasPerms: (perm: string) => {
-    //   return matchPermission(currentUser?.permissions, perm);
-    // },
-    // hasNoPerms: (perm: string) => {
-    //   return !matchPermission(currentUser?.permissions, perm);
-    // },
+    hasPerms: (perm: string) => {
+      return matchPermission(currentUser?.permissions, perm);
+    },
+    hasNoPerms: (perm: string) => {
+      return !matchPermission(currentUser?.permissions, perm);
+    },
     // roleFiler: (route: { authority: string[] }) => {
     //   return checkRole(currentUser?.roles, route.authority);
     // },
