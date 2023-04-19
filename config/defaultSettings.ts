@@ -7,6 +7,7 @@ export type SwitchTabsOptions = {
   fixed?: boolean;
   /** 是否在顶栏显示刷新按钮 */
   reloadable?: boolean;
+  hidenAntTabs?: boolean;
 } & Pick<UseSwitchTabsOptions, "persistent">;
 
 const Settings: LayoutSettings & {
@@ -35,6 +36,7 @@ const Settings: LayoutSettings & {
     persistent: {
       force: false,
     },
+    hidenAntTabs: true,
   },
   iconfontUrl: "",
 };

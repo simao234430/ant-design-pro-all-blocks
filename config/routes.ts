@@ -1,4 +1,5 @@
-﻿export default [
+﻿const RouteWatcher = "@/components/page_tab/RouteWatcher";
+export default [
   {
     name: "tool",
     icon: "BugOutlined",
@@ -15,7 +16,7 @@
         path: "/tool/gen",
         component: "tool/gen/index",
         access: "authorize",
-
+        wrappers: [RouteWatcher],
         title: "menu.title.gen",
       },
       {
@@ -24,7 +25,7 @@
         path: "/tool/build",
         component: "tool/builder",
         access: "authorize",
-
+        wrappers: [RouteWatcher],
         title: "menu.title.design",
       },
       {
@@ -33,7 +34,7 @@
         path: "/tool/swagger",
         component: "tool/swagger",
         access: "authorize",
-
+        wrappers: [RouteWatcher],
         //KeepAlive: true,
         title: "menu.title.swagger",
       },
@@ -43,7 +44,7 @@
         path: "/tool/test",
         component: "tool/test",
         access: "authorize",
-
+        wrappers: [RouteWatcher],
         title: "menu.title.test",
       },
       {
@@ -52,7 +53,7 @@
         path: "/tool/calendar",
         component: "tool/calendar",
         access: "authorize",
-
+        wrappers: [RouteWatcher],
         title: "menu.title.calendar",
       },
     ],

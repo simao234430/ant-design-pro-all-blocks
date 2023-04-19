@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { BookOutlined, LinkOutlined } from "@ant-design/icons";
 import defaultSettings from "../config/defaultSettings";
 import { getRoutersInfo, getUserInfo } from "./services/ant-design-pro/session";
+import TabLayout from "./components/page_tab/TabLayout";
 
 const isDev = process.env.NODE_ENV === "development";
 const loginPath = "/user/login";
@@ -115,39 +116,54 @@ export const layout: RunTimeLayoutConfig = ({
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
+        // router.push(location);
+        console.log("onPageChange");
+        console.log(location);
         history.push(location);
       }
     },
 
     childrenRender: (children, props) => {
       const { route } = props;
+      const contextMenuLabels = {
+        closeTab: "关闭标签",
+        closeRightTabs: "关闭右侧标签",
+        closeAllTabs: "关闭所有标签",
+      };
+
       // if (initialState?.loading) return <PageLoading />;
       return (
         // <SwitchTabs></SwitchTabs>
         // <MyTabLayout {...props}>{children}</MyTabLayout>
-        <SwitchTabsLayout
-          mode={switchTabs?.mode}
-          persistent={{ force: false }}
-          fixed={switchTabs?.fixed}
-          routes={route!.routes}
-        >
-          <div>
-            {children}
-            {!props.location?.pathname?.includes("/login") && (
-              <SettingDrawer
-                disableUrlParams
-                enableDarkTheme
-                settings={initialState?.settings}
-                onSettingChange={(settings) => {
-                  setInitialState((preInitialState) => ({
-                    ...preInitialState,
-                    settings,
-                  }));
-                }}
-              />
-            )}
-          </div>
-        </SwitchTabsLayout>
+        switchTabs?.hidenAntTabs ? (
+          children
+        ) : (
+          <TabLayout {...props} contextMenuLabels={contextMenuLabels} />
+        )
+
+        // <SwitchTabsLayout
+        //   mode={switchTabs?.mode}
+        //   persistent={{ force: false }}
+        //   fixed={switchTabs?.fixed}
+        //   routes={route!.routes}
+        // >
+        //   <div>
+        //     {children}
+        //     {!props.location?.pathname?.includes("/login") && (
+        //       <SettingDrawer
+        //         disableUrlParams
+        //         enableDarkTheme
+        //         settings={initialState?.settings}
+        //         onSettingChange={(settings) => {
+        //           setInitialState((preInitialState) => ({
+        //             ...preInitialState,
+        //             settings,
+        //           }));
+        //         }}
+        //       />
+        //     )}
+        //   </div>
+        // </SwitchTabsLayout>
       );
     },
     // ...initialState?.settings,

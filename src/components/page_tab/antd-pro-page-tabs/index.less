@@ -1,0 +1,75 @@
+:global {
+  .ant-layout-content .ant-page-tabs {
+    .ant-page-tab-list {
+      overflow: visible;
+      & > .ant-tabs-nav {
+        margin-bottom: 24px;
+        // 当值 Tabs force render 时向右切换出现闪烁的纵向滚动条
+        overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+        & > .ant-tabs-nav-wrap {
+          background-color: #fff;
+        }
+      }
+    }
+  }
+
+  .ant-pro-basicLayout-content-disable-margin .ant-page-tabs {
+    margin-top: 0;
+    .ant-page-tab-list > .ant-tabs-nav {
+      margin-bottom: unset;
+      & > .ant-tabs-nav-wrap {
+        margin-right: 0;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .ant-page-tabs {
+    .ant-tabs-nav {
+      width: 100%;
+      background-color: #fff;
+    }
+  }
+}
+
+.contextMenu {
+  position: fixed;
+  display: none;
+  padding: 4px 0;
+  list-style: none;
+  background-color: rgba(255, 255, 255, 0.98);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 2px 6px 2px #ddd;
+
+  li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f2f5;
+    transition: all 0.1s;
+    user-select: none;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: #0170fe;
+      cursor: pointer;
+    }
+
+    &:active {
+      color: #000;
+      background-color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}
+
+.show {
+  display: block;
+}
+
+.tabLabel {
+  user-select: none;
+}
