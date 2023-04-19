@@ -73,4 +73,6 @@ export default {
   'menu.tool.gen': '代码生成',
   'menu.tool.design': '表单构建',
   'menu.tool.swagger': 'swagger',
+  'menu.tool.test': 'test工具',
+  'menu.tool.calendar': 'test日历',
 };

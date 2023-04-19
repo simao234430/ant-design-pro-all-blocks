@@ -3,28 +3,30 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import type { MenuDataItem } from '@ant-design/pro-layout';
-import React from 'react';
-import type * as H from 'history-with-query';
-import { useIntl, useLocation } from 'umi';
-import _isArray from 'lodash/isArray';
-import memoizedOne from 'memoize-one';
-import deepEqual from 'fast-deep-equal';
-import type { Route } from '@ant-design/pro-layout/lib/typings';
-import { PageLoading } from '@ant-design/pro-layout';
+import type { MenuDataItem } from "@ant-design/pro-layout";
+import React from "react";
+import type * as H from "history-with-query";
+import { useIntl, useLocation } from "umi";
+import _isArray from "lodash/isArray";
+import memoizedOne from "memoize-one";
+import deepEqual from "fast-deep-equal";
+import type { Route } from "@ant-design/pro-layout/lib/typings";
+import { PageLoading } from "@ant-design/pro-layout";
 
-import type { Mode, RouteConfig } from 'use-switch-tabs';
-import { isSwitchTab } from 'use-switch-tabs';
-import type { SwitchTabsProps } from '@/components/SwitchTabs';
-import SwitchTabs from '@/components/SwitchTabs';
+import type { Mode, RouteConfig } from "use-switch-tabs";
+import { isSwitchTab } from "use-switch-tabs";
+import type { SwitchTabsProps } from "@/components/SwitchTabs";
+import SwitchTabs from "@/components/SwitchTabs";
 
-export interface MakeUpRoute extends Route, Pick<RouteConfig, 'follow' | 'redirect'> {}
+export interface MakeUpRoute
+  extends Route,
+    Pick<RouteConfig, "follow" | "redirect"> {}
 
 /** 根据路由定义中的 name 本地化标题 */
 function localeRoutes(
   routes: MakeUpRoute[],
   formatMessage: any,
-  parent: MakeUpRoute | null = null,
+  parent: MakeUpRoute | null = null
 ): MenuDataItem[] {
   const result: MenuDataItem[] = [];
 
@@ -35,7 +37,7 @@ function localeRoutes(
     //   return;
     // }
     // 为标签页展示的页面注入 redirect 路由
-    if (item.redirect && item.path !== '/') {
+    if (item.redirect && item.path !== "/") {
       result.push(item);
       return;
     }
@@ -50,7 +52,9 @@ function localeRoutes(
       locale: item.name,
     };
 
-    const localeId = parent ? `${parent.locale}.${newItem.locale}` : `menu.${newItem.locale}`;
+    const localeId = parent
+      ? `${parent.locale}.${newItem.locale}`
+      : `menu.${newItem.locale}`;
 
     newItem = {
       ...rest,
@@ -74,14 +78,19 @@ function localeRoutes(
 const memoizedOneLocaleRoutes = memoizedOne(localeRoutes, deepEqual);
 
 export interface RouteTabsLayoutProps
-  extends Pick<SwitchTabsProps, 'persistent' | 'fixed' | 'setTabName' | 'footerRender'> {
+  extends Pick<
+    SwitchTabsProps,
+    "persistent" | "fixed" | "setTabName" | "footerRender"
+  > {
   mode?: Mode | false;
   loading?: boolean;
   routes?: MakeUpRoute[];
   children: React.ReactElement;
 }
 
-export default function TabsLayout(props: RouteTabsLayoutProps): JSX.Element {
+export default function SwitchTabsLayout(
+  props: RouteTabsLayoutProps
+): JSX.Element {
   const { mode, loading, routes, children, ...rest } = props;
 
   const { formatMessage } = useIntl();

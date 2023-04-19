@@ -1,31 +1,48 @@
-import type { DataNode } from 'antd/lib/tree';
-import { parse } from 'querystring';
+import type { DataNode } from "antd/lib/tree";
+import { parse } from "querystring";
 
-export const LoginPageUrl = '/user/login';
-
+export const LoginPageUrl = "/user/login";
+// ** Checks if an object is empty (returns boolean)
+export const isObjEmpty = (obj: {}) => Object.keys(obj).length === 0;
 const reg =
   /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export const isUrl = (path: string): boolean => reg.test(path);
 
+export const defineColorBySeverity = (
+  severity: NotificationType | undefined,
+  rgb = false
+): string => {
+  const postfix = rgb ? "rgb-color" : "color";
+  switch (severity) {
+    case "error":
+    case "warning":
+    case "success":
+      return `var(--${severity}-${postfix})`;
+    case "info":
+    default:
+      return `var(--primary-${postfix})`;
+  }
+};
+
 export const isAntDesignPro = (): boolean => {
-  if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
+  if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === "site") {
     return true;
   }
-  return window.location.hostname === 'preview.pro.ant.design';
+  return window.location.hostname === "preview.pro.ant.design";
 };
 
 // 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
 export const isAntDesignProOrDev = (): boolean => {
   const { NODE_ENV } = process.env;
-  if (NODE_ENV === 'development') {
+  if (NODE_ENV === "development") {
     return true;
   }
   return isAntDesignPro();
 };
 
 export function trim(x: string) {
-  return x.replace(/^\s+|\s+$/gm, '');
+  return x.replace(/^\s+|\s+$/gm, "");
 }
 
 /**
@@ -41,37 +58,45 @@ export function buildTreeData(
   name: string,
   parentId: string,
   parentName: string,
-  children: string,
+  children: string
 ) {
   const config = {
-    id: id || 'id',
-    name: name || 'name',
-    parentId: parentId || 'parentId',
-    parentName: parentName || 'parentName',
-    childrenList: children || 'children',
+    id: id || "id",
+    name: name || "name",
+    parentId: parentId || "parentId",
+    parentName: parentName || "parentName",
+    childrenList: children || "children",
   };
 
   const childrenListMap = {};
   const nodeIds = {};
   const tree: any[] = [];
-  data.forEach((item: { id: string; name: string; key: string; title: string; value: any }) => {
-    const d = item;
-    const pId = d[config.parentId];
-    if (childrenListMap[pId] == null) {
-      childrenListMap[pId] = [];
+  data.forEach(
+    (item: {
+      id: string;
+      name: string;
+      key: string;
+      title: string;
+      value: any;
+    }) => {
+      const d = item;
+      const pId = d[config.parentId];
+      if (childrenListMap[pId] == null) {
+        childrenListMap[pId] = [];
+      }
+      d.key = d[config.id];
+      d.title = d[config.name];
+      d.value = d[config.id];
+      nodeIds[d[config.id]] = d;
+      childrenListMap[pId].push(d);
     }
-    d.key = d[config.id];
-    d.title = d[config.name];
-    d.value = d[config.id];
-    nodeIds[d[config.id]] = d;
-    childrenListMap[pId].push(d);
-  });
+  );
 
   data.forEach((item: any) => {
     const d = item;
     const pId = d[config.parentId];
     if (nodeIds[pId] == null) {
-      d[config.parentName] = '';
+      d[config.parentName] = "";
       tree.push(d);
     }
   });
@@ -96,7 +121,7 @@ export function buildTreeData(
   return tree;
 }
 
-export const getPageQuery = () => parse(window.location.href.split('?')[1]);
+export const getPageQuery = () => parse(window.location.href.split("?")[1]);
 
 export function formatTreeSelectData(arrayList: any): DataNode[] {
   const treeSelectData: DataNode[] = arrayList.map((item: any) => {
@@ -115,5 +140,7 @@ export function formatTreeSelectData(arrayList: any): DataNode[] {
 }
 
 export function download(fileName: string) {
-  window.location.href = `/common/download?fileName=${encodeURI(fileName)}&delete=${true}`;
+  window.location.href = `/common/download?fileName=${encodeURI(
+    fileName
+  )}&delete=${true}`;
 }

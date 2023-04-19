@@ -1,0 +1,169 @@
+.demo_app {
+  display: flex;
+  min-height: 100%;
+  font-size: 14px;
+}
+.demo_app_sidebar {
+  width: 300px;
+  line-height: 1.5;
+  background: #eaf9ff;
+  border-right: 1px solid #d3e2e8;
+}
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+.demo_app_main {
+  flex-grow: 1;
+}
+
+// Full calendar styles
+.fc {
+  background-color: #f8f8f8;
+  // Toolbar
+  .fc-toolbar {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    margin: 1.75rem !important;
+    h2 {
+      font-size: 1.45rem;
+    }
+    .fc-header-toolbar {
+      margin-top: 1.75rem !important;
+      margin-bottom: 1.75rem !important;
+    }
+    .fc-prev-button,
+    .fc-next-button {
+      display: inline-block;
+      background-color: transparent;
+      border-color: transparent;
+
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: transparent !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+      }
+    }
+    .fc-prev-button {
+      padding-left: 0 !important;
+    }
+    .fc-toolbar-chunk:first-child {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .fc-button {
+      color: @primary-color;
+      &:active,
+      &:focus {
+        color: @primary-color;
+        box-shadow: none;
+      }
+    }
+    .fc-button-group {
+      .fc-button {
+        text-transform: capitalize;
+        &:focus {
+          box-shadow: none;
+        }
+      }
+      .fc-button-primary {
+        &:not(.fc-prev-button):not(.fc-next-button) {
+          color: @primary-color;
+          // background-color: rgba(@primary-color, 0.1);
+          background-color: transparent;
+          border-color: @primary-color;
+          &.fc-button-active,
+          &:hover {
+            color: @primary-color;
+
+            border-color: @primary-color !important;
+          }
+        }
+        &.fc-sidebarToggle-button {
+          border: 0;
+
+          i,
+          svg {
+            width: 21px;
+            height: 21px;
+            font-size: 21px;
+          }
+        }
+      }
+      .fc-sidebarToggle-button {
+        padding-left: 0;
+
+        background-color: transparent !important;
+
+        &:not(.fc-prev-button):not(.fc-next-button):hover {
+          background-color: transparent !important;
+        }
+
+        & + div {
+          margin-left: 0;
+        }
+      }
+      .fc-dayGridMonth-button,
+      .fc-timeGridWeek-button,
+      .fc-timeGridDay-button,
+      .fc-listMonth-button {
+        &:first-child {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        &:last-child {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+    }
+    & > * > :not(:first-child) {
+      margin-left: 0rem;
+    }
+    .fc-toolbar-title {
+      margin-left: 0.25rem;
+    }
+    .fc--button:empty,
+    .fc-toolbar-chunk:empty {
+      display: none;
+    }
+  }
+}
+
+.primary-color {
+  .fc-event-main {
+    color: #1890ff !important;
+  }
+  background-color: rgba(#1890ff, 0.12) !important;
+  border-color: rgba(#1890ff, 0.12) !important;
+}
+.success-color {
+  background-color: rgba(#52c41a, 0.12) !important;
+  border-color: rgba(#52c41a, 0.12) !important;
+  .fc-event-main {
+    color: #52c41a !important;
+  }
+}
+.error-color {
+  background-color: rgba(#ff4d4f, 0.12) !important;
+  border-color: rgba(#ff4d4f, 0.12) !important;
+  .fc-event-main {
+    color: #ff4d4f !important;
+  }
+}
+.warning-color {
+  background-color: rgba(#faad14, 0.12) !important;
+  border-color: rgba(#faad14, 0.12) !important;
+  .fc-event-main {
+    color: #faad14 !important;
+  }
+}
+.info-color {
+  .fc-event-main {
+    color: #1890ff !important;
+  }
+  background-color: rgba(#1890ff, 0.12) !important;
+  border-color: rgba(#1890ff, 0.12) !important;
+}

@@ -1,6 +1,15 @@
-import { Request, Response } from 'express';
-import moment from 'moment';
-import { parse } from 'url';
+import { DatabaseOutlined } from "@ant-design/icons";
+import { Request, Response } from "express";
+import moment from "moment";
+import { parse } from "url";
+const date = new Date();
+const prevDay = new Date().getDate() - 1;
+const nextDay = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+
+// prettier-ignore
+const nextMonth = date.getMonth() === 11 ? new Date(date.getFullYear() + 1, 0, 1) : new Date(date.getFullYear(), date.getMonth() + 1, 1)
+// prettier-ignore
+const prevMonth = date.getMonth() === 11 ? new Date(date.getFullYear() - 1, 0, 1) : new Date(date.getFullYear(), date.getMonth() - 1, 1)
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
@@ -11,18 +20,18 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       key: index,
       disabled: i % 6 === 0,
-      href: 'https://ant.design',
+      href: "https://ant.design",
       avatar: [
-        'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-        'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
+        "https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png",
+        "https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png",
       ][i % 2],
       name: `TradeCode ${index}`,
-      owner: '曲丽丽',
-      desc: '这是一段描述',
+      owner: "曲丽丽",
+      desc: "这是一段描述",
       callNo: Math.floor(Math.random() * 1000),
       status: Math.floor(Math.random() * 10) % 4,
-      updatedAt: moment().format('YYYY-MM-DD'),
-      createdAt: moment().format('YYYY-MM-DD'),
+      updatedAt: moment().format("YYYY-MM-DD"),
+      createdAt: moment().format("YYYY-MM-DD"),
       progress: Math.ceil(Math.random() * 100),
     });
   }
@@ -34,7 +43,10 @@ let tableListDataSource = genList(1, 100);
 
 function getRule(req: Request, res: Response, u: string) {
   let realUrl = u;
-  if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
+  if (
+    !realUrl ||
+    Object.prototype.toString.call(realUrl) !== "[object String]"
+  ) {
     realUrl = req.url;
   }
   const { current = 1, pageSize = 10 } = req.query;
@@ -46,14 +58,14 @@ function getRule(req: Request, res: Response, u: string) {
 
   let dataSource = [...tableListDataSource].slice(
     ((current as number) - 1) * (pageSize as number),
-    (current as number) * (pageSize as number),
+    (current as number) * (pageSize as number)
   );
   if (params.sorter) {
     const sorter = JSON.parse(params.sorter);
     dataSource = dataSource.sort((prev, next) => {
       let sortNumber = 0;
       Object.keys(sorter).forEach((key) => {
-        if (sorter[key] === 'descend') {
+        if (sorter[key] === "descend") {
           if (prev[key] - next[key] > 0) {
             sortNumber += -1;
           } else {
@@ -90,7 +102,9 @@ function getRule(req: Request, res: Response, u: string) {
   }
 
   if (params.name) {
-    dataSource = dataSource.filter((data) => data?.name?.includes(params.name || ''));
+    dataSource = dataSource.filter((data) =>
+      data?.name?.includes(params.name || "")
+    );
   }
   const result = {
     data: dataSource,
@@ -105,7 +119,10 @@ function getRule(req: Request, res: Response, u: string) {
 
 function postRule(req: Request, res: Response, u: string, b: Request) {
   let realUrl = u;
-  if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
+  if (
+    !realUrl ||
+    Object.prototype.toString.call(realUrl) !== "[object String]"
+  ) {
     realUrl = req.url;
   }
 
@@ -114,26 +131,28 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
 
   switch (method) {
     /* eslint no-case-declarations:0 */
-    case 'delete':
-      tableListDataSource = tableListDataSource.filter((item) => key.indexOf(item.key) === -1);
+    case "delete":
+      tableListDataSource = tableListDataSource.filter(
+        (item) => key.indexOf(item.key) === -1
+      );
       break;
-    case 'post':
+    case "post":
       (() => {
         const i = Math.ceil(Math.random() * 10000);
         const newRule: API.RuleListItem = {
           key: tableListDataSource.length,
-          href: 'https://ant.design',
+          href: "https://ant.design",
           avatar: [
-            'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-            'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
+            "https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png",
+            "https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png",
           ][i % 2],
           name,
-          owner: '曲丽丽',
+          owner: "曲丽丽",
           desc,
           callNo: Math.floor(Math.random() * 1000),
           status: Math.floor(Math.random() * 10) % 2,
-          updatedAt: moment().format('YYYY-MM-DD'),
-          createdAt: moment().format('YYYY-MM-DD'),
+          updatedAt: moment().format("YYYY-MM-DD"),
+          createdAt: moment().format("YYYY-MM-DD"),
           progress: Math.ceil(Math.random() * 100),
         };
         tableListDataSource.unshift(newRule);
@@ -141,7 +160,7 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
       })();
       return;
 
-    case 'update':
+    case "update":
       (() => {
         let newRule = {};
         tableListDataSource = tableListDataSource.map((item) => {
@@ -167,8 +186,125 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
 
   res.json(result);
 }
-
+function getCalendar(req: Request, res: Response) {
+  const data = {
+    events: [
+      {
+        id: 1,
+        url: "",
+        title: "Design Review",
+        start: date,
+        end: nextDay,
+        allDay: false,
+        extendedProps: {
+          calendar: "Business",
+        },
+      },
+      {
+        id: 2,
+        url: "",
+        title: "Meeting With Client",
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -11),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -10),
+        allDay: true,
+        extendedProps: {
+          calendar: "Business",
+        },
+      },
+      {
+        id: 3,
+        url: "",
+        title: "Family Trip",
+        allDay: true,
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -9),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -7),
+        extendedProps: {
+          calendar: "Holiday",
+        },
+      },
+      {
+        id: 4,
+        url: "",
+        title: "Doctor's Appointment",
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -11),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -10),
+        allDay: true,
+        extendedProps: {
+          calendar: "Personal",
+        },
+      },
+      {
+        id: 5,
+        url: "",
+        title: "Dart Game?",
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
+        allDay: true,
+        extendedProps: {
+          calendar: "ETC",
+        },
+      },
+      {
+        id: 6,
+        url: "",
+        title: "Meditation",
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
+        allDay: true,
+        extendedProps: {
+          calendar: "Personal",
+        },
+      },
+      {
+        id: 7,
+        url: "",
+        title: "Dinner",
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
+        allDay: true,
+        extendedProps: {
+          calendar: "Family",
+        },
+      },
+      {
+        id: 8,
+        url: "",
+        title: "Product Review",
+        start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
+        end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
+        allDay: true,
+        extendedProps: {
+          calendar: "Business",
+        },
+      },
+      {
+        id: 9,
+        url: "",
+        title: "Monthly Meeting",
+        start: nextMonth,
+        end: nextMonth,
+        allDay: true,
+        extendedProps: {
+          calendar: "Business",
+        },
+      },
+      {
+        id: 10,
+        url: "",
+        title: "Monthly Checkup",
+        start: prevMonth,
+        end: prevMonth,
+        allDay: true,
+        extendedProps: {
+          calendar: "Personal",
+        },
+      },
+    ],
+  };
+  res.json(DatabaseOutlined);
+}
 export default {
-  'GET /api/rule': getRule,
-  'POST /api/rule': postRule,
+  "GET /api/rule": getRule,
+  "GET /api/calendar": getCalendar,
+  "POST /api/rule": postRule,
 };
